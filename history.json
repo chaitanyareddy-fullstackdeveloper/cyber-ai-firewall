@@ -1,0 +1,146 @@
+[
+  {
+    "state": [
+      5,
+      false,
+      2
+    ],
+    "action": "allow",
+    "reward": 5
+  },
+  {
+    "state": [
+      13,
+      true,
+      351.61400481388574
+    ],
+    "action": "block",
+    "reward": 10
+  },
+  {
+    "state": [
+      18,
+      true,
+      252.97884546571774
+    ],
+    "action": "block",
+    "reward": 10
+  },
+  {
+    "state": [
+      5,
+      false,
+      651.1420572706123
+    ],
+    "action": "block",
+    "reward": 10
+  },
+  {
+    "state": [
+      3,
+      false,
+      505.3235432716782
+    ],
+    "action": "rate_limit",
+    "reward": 10
+  },
+  {
+    "state": [
+      8,
+      false,
+      213.81495415341635
+    ],
+    "action": "allow",
+    "reward": 5
+  },
+  {
+    "state": [
+      19,
+      false,
+      310.78888170424176
+    ],
+    "action": "block",
+    "reward": 10
+  },
+  {
+    "state": [
+      14,
+      true,
+      152.63091428050302
+    ],
+    "action": "block",
+    "reward": 10
+  },
+  {
+    "state": [
+      0,
+      false,
+      648.911101375114
+    ],
+    "action": "block",
+    "reward": 10
+  },
+  {
+    "state": [
+      3,
+      false,
+      357.7403293281137
+    ],
+    "action": "rate_limit",
+    "reward": -5
+  },
+  {
+    "state": [
+      17,
+      true,
+      695.7021883204176
+    ],
+    "action": "block",
+    "reward": 10
+  },
+  {
+    "state": [
+      0,
+      true,
+      0
+    ],
+    "action": "allow",
+    "reward": -10
+  },
+  {
+    "state": [
+      0,
+      false,
+      0
+    ],
+    "action": "allow",
+    "reward": 5
+  },
+  {
+    "state": [
+      0,
+      false,
+      0
+    ],
+    "action": "allow",
+    "reward": 5
+  },
+  {
+    "state": [
+      0,
+      false,
+      0
+    ],
+    "action": "rate_limit",
+    "reward": -5
+  },
+  {
+    "state": [
+      0,
+      false,
+      0
+    ],
+    "action": "allow",
+    "reward": 5
+  }
+]

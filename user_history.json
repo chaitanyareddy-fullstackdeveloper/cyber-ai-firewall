@@ -1,0 +1,20 @@
+[
+  {
+    "state": [
+      5.0,
+      false,
+      100.0
+    ],
+    "action": "allow",
+    "reward": 5
+  },
+  {
+    "state": [
+      5.0,
+      true,
+      1.0
+    ],
+    "action": "allow",
+    "reward": -10
+  }
+]
