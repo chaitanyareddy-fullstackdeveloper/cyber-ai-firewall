@@ -6,21 +6,18 @@ import json
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
-load_dotenv()  # 🔥 this loads .env file
+
+load_dotenv()
 
 # ==============================
 # 🔐 OpenAI Setup
 # ==============================
 
-client = OpenAI(
-    api_key=os.getenv("Api_Key")
-)
-
+client = OpenAI(api_key=os.getenv("OPENAIAPIKEY"))
 MODEL = os.getenv("MODEL_NAME")
 
-
 # ==============================
-# 🧠 AI Decision (REAL API)
+# 🧠 AI Decision
 # ==============================
 
 def ai_decision(state):
@@ -47,7 +44,6 @@ def ai_decision(state):
 
         action = response.choices[0].message.content.strip().lower()
 
-        # safety check
         if action not in ["allow", "block", "rate_limit"]:
             return "allow"
 
@@ -55,8 +51,7 @@ def ai_decision(state):
 
     except Exception as e:
         print("API Error:", e)
-        return "allow"   # ✅ fallback
-
+        return "allow"
 
 # ==============================
 # 🧠 Core Logic
@@ -66,7 +61,6 @@ def detect_attack(state):
     failed_logins, spike, rate = state
     return failed_logins > 10 or spike or rate > 400
 
-
 def generate_random_state():
     return (
         random.randint(0, 25),
@@ -74,11 +68,9 @@ def generate_random_state():
         random.uniform(50, 800)
     )
 
-
 def process_state(state, history):
     failed_logins, spike, rate = state
 
-    # ✅ prevent None crash
     failed_logins = failed_logins or 0
     rate = rate or 0
     spike = spike or False
@@ -86,7 +78,6 @@ def process_state(state, history):
     action = ai_decision((failed_logins, spike, rate))
     is_attack = detect_attack((failed_logins, spike, rate))
 
-    # Reward logic
     if is_attack:
         reward = 10 if action in ["block", "rate_limit"] else -10
     else:
@@ -102,23 +93,13 @@ def process_state(state, history):
     })
     history = history[-20:]
 
-    # ==============================
-    # 📊 Graph
-    # ==============================
     plt.figure()
     plt.bar(["Agent", "Ideal"], [reward / 10, ideal_reward / 10])
     plt.title("Performance Comparison")
-
     fig = plt.gcf()
     plt.close()
 
-    # ==============================
-    # 🎨 Alerts
-    # ==============================
-    if is_attack:
-        alert = "<h3 style='color:red;'>🚨 Attack Detected</h3>"
-    else:
-        alert = "<h3 style='color:green;'>✅ Normal Traffic</h3>"
+    alert = "<h3 style='color:red;'>🚨 Attack Detected</h3>" if is_attack else "<h3 style='color:green;'>✅ Normal Traffic</h3>"
 
     history_html = "".join([
         f"<div>• {h['state']} → {h['action']} ({h['reward']})</div>"
@@ -137,33 +118,40 @@ def process_state(state, history):
 
     return result, fig, history
 
-
 # ==============================
 # 🔹 Modes
 # ==============================
 
 def manual_mode(failed, spike, rate, history):
-    if failed is None:
-        failed = 0
-    if rate is None:
-        rate = 0
-    if spike is None:
-        spike = False
-
-    state = (float(failed), bool(spike), float(rate))
-
+    state = (float(failed or 0), bool(spike), float(rate or 0))
     result, graph, history = process_state(state, history)
-
     return result, graph, "Analysis Completed", history
 
+# ==============================
+# 🔴 Streaming Control
+# ==============================
 
-def auto_stream(history):
-    for _ in range(10):
+def toggle_stream(is_streaming):
+    return not is_streaming
+
+def update_button_label(is_streaming):
+    return "Stop Live Stream" if is_streaming else "Start Live Stream"
+
+def auto_stream(history, is_streaming):
+    if not is_streaming:
+        yield "⛔ Live Streaming Stopped", None, "Stopped", history, is_streaming
+        return
+
+    for _ in range(50):
         state = generate_random_state()
         result, graph, history = process_state(state, history)
-        yield result, graph, "Live Monitoring Running...", history
+
+        yield result, graph, "Live Monitoring Running...", history, is_streaming
         time.sleep(1)
 
+        if not is_streaming:
+            yield "⛔ Live Streaming Stopped", None, "Stopped", history, is_streaming
+            return
 
 # ==============================
 # 🗑️ Controls
@@ -172,13 +160,11 @@ def auto_stream(history):
 def clear_history():
     return "History Cleared", None, []
 
-
 def download_history(history):
     file_path = "user_history.json"
     with open(file_path, "w") as f:
         json.dump(history, f, indent=2)
     return file_path
-
 
 # ==============================
 # 🚀 UI
@@ -189,6 +175,7 @@ with gr.Blocks() as demo:
     gr.Markdown("# 🛡️ CyberShield AI Dashboard")
 
     session_history = gr.State([])
+    streaming_state = gr.State(False)
 
     with gr.Row():
 
@@ -218,9 +205,17 @@ with gr.Blocks() as demo:
     stream_btn = gr.Button("Start Live Stream")
 
     stream_btn.click(
+        fn=toggle_stream,
+        inputs=[streaming_state],
+        outputs=[streaming_state]
+    ).then(
+        fn=update_button_label,
+        inputs=[streaming_state],
+        outputs=[stream_btn]
+    ).then(
         fn=auto_stream,
-        inputs=[session_history],
-        outputs=[output_text, output_graph, status, session_history]
+        inputs=[session_history, streaming_state],
+        outputs=[output_text, output_graph, status, session_history, streaming_state]
     )
 
     gr.Markdown("### History Controls")
@@ -243,11 +238,6 @@ with gr.Blocks() as demo:
         outputs=file_output
     )
 
-
-# ==============================
-# 🔥 FINAL LAUNCH
-# ==============================
-
-print("Server running at: http://localhost:7860")
+print("Server running...")
 
 demo.queue().launch(server_name="0.0.0.0", server_port=7860)
