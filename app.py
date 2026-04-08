@@ -11,16 +11,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# ==============================
-# 🔐 OpenAI Setup
-# ==============================
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+client = OpenAI(api_key=os.getenv("OPENAIAPIKEY"))
 MODEL = os.getenv("MODEL_NAME")
 
-# ==============================
-# 🧠 ML MODEL
-# ==============================
+
 
 def generate_training_data(n=500):
     X, y = [], []
@@ -45,9 +41,7 @@ def detect_attack_ml(state):
     data = np.array([[state[0], int(state[1]), state[2]]])
     return model.predict(data)[0] == 1
 
-# ==============================
-# 🤖 AI Decision
-# ==============================
+
 
 def ai_decision(state):
     try:
@@ -78,9 +72,7 @@ def ai_decision(state):
         print("AI Error:", e)
         return "allow"
 
-# ==============================
-# ⚙️ Core Logic
-# ==============================
+
 
 def generate_random_state():
     return (
@@ -103,8 +95,8 @@ def process_state(state, history):
         "reward": reward
     })
 
-    # keep only last 20 safely
-    if len(history) > 20:
+    # keep only last 10 safely
+    if len(history) > 10:
         history.pop(0)
 
     # Graph
@@ -133,18 +125,14 @@ def process_state(state, history):
 
     return result, fig, history
 
-# ==============================
-# 🧪 Manual Mode
-# ==============================
+
 
 def manual_mode(failed, spike, rate, history):
     state = (failed or 0, spike or False, rate or 0)
     result, graph, history = process_state(state, history)
     return result, graph, "Analysis Completed", history
 
-# ==============================
-# 🔴 STREAM (FIXED)
-# ==============================
+
 
 def auto_stream(history):
     while True:
@@ -153,9 +141,8 @@ def auto_stream(history):
         yield result, graph, "Live Monitoring Running...", history
         time.sleep(1)
 
-# ==============================
-# 🎛️ Controls
-# ==============================
+
+
 
 def clear_history():
     return "History Cleared", None, []
@@ -166,12 +153,9 @@ def download_history(history):
         json.dump(history, f)
     return path
 
-# ==============================
-# 🎨 UI
-# ==============================
 
 with gr.Blocks() as demo:
-    gr.Markdown("# 🛡️ CyberShield AI Dashboard")
+    gr.Markdown("#  CyberShield AI Dashboard")
 
     session_history = gr.State([])
 

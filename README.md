@@ -1,4 +1,4 @@
-# 🛡️ CyberShield AI – Intelligent Firewall Simulator
+#  CyberShield AI – Intelligent Firewall Simulator
 
 ![Python](https://img.shields.io/badge/Python-3.8+-blue?logo=python)
 ![Framework](https://img.shields.io/badge/Framework-Gradio-orange?logo=python)
@@ -8,7 +8,7 @@
 
 ---
 
-## 🚀 Overview & Motivation
+##  Overview & Motivation
 
 CyberShield AI is an intelligent firewall simulation system powered by AI that monitors network activity and dynamically decides whether to allow, block, or rate-limit packets based on ongoing behaviors. 
 
@@ -16,7 +16,7 @@ CyberShield AI is an intelligent firewall simulation system powered by AI that m
 
 ---
 
-## 🧩 Observation & Action Spaces
+##  Observation & Action Spaces
 
 The environment is strictly typed and complies with the OpenEnv structural requirements.
 
@@ -26,7 +26,7 @@ The state returned by the environment is a Tuple representing the current proper
 - `is_blocked` (Boolean): Flag indicating if the current source IP/ID is presently under a strict block.
 - `load` (Float): Current system traffic load or concurrent request saturation.
 
-### **Action Space**
+### Action Space
 Agents output discrete decisions to manage the simulated packet lifecycle.
 - `"allow"` : Permits the packet to pass.
 - `"block"` : Instantly terminates and bans the connection.
@@ -34,7 +34,7 @@ Agents output discrete decisions to manage the simulated packet lifecycle.
 
 ---
 
-## 🎯 Task Descriptions (Difficulty Scaling)
+##  Task Descriptions (Difficulty Scaling)
 
 The environment consists of 3 deterministic graders (tasks) scaling in difficulty.
 
@@ -52,7 +52,7 @@ The environment consists of 3 deterministic graders (tasks) scaling in difficult
 
 ---
 
-## 📊 Baseline Scores
+##  Baseline Scores
 
 We evaluated the `inference.py` using standard frontier models via the OpenAI structural interface.
 
@@ -64,7 +64,7 @@ We evaluated the `inference.py` using standard frontier models via the OpenAI st
 
 ---
 
-## ⚙️ Setup & Installation
+##  Setup & Installation
 
 ### 1. Clone Repository
 ```bash
@@ -87,7 +87,7 @@ pip install -r requirements.txt fastapi uvicorn pydantic openai
 
 ---
 
-## ▶️ Usage
+##  Usage
 
 Run the OpenEnv API Interface Locally:
 ```bash
@@ -101,7 +101,7 @@ openenv validate
 
 ---
 
-## 🐳 Docker Setup
+##  Docker Setup
 
 Build the evaluation container conforming to OpenEnv limits (2vCPU, 8GB Ram):
 
@@ -110,10 +110,10 @@ docker build -t cyber-ai-firewall .
 docker run -e HF_TOKEN=$HF_TOKEN -p 7860:7860 cyber-ai-firewall
 ```
 
-## 🙌 Acknowledgements
+## Acknowledgements
 
 - OpenEnv Framework
 - Gradio Community
 - Hugging Face Open-Source Models
 
-💡 CyberShield AI demonstrates how intelligent systems can seamlessly be evaluated inside standardized AI frameworks.
+CyberShield AI demonstrates how intelligent systems can seamlessly be evaluated inside standardized AI frameworks.

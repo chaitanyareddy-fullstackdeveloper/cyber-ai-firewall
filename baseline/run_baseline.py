@@ -63,7 +63,7 @@ def main():
 
     results = []
 
-    print("\n🚀 CyberShield AI Advanced Evaluation\n")
+    print("\n CyberShield AI Advanced Evaluation\n")
 
     for name, env, max_reward in tasks:
         total_reward, steps, accuracy, tp, fp, tn, fn = run_task(env)
@@ -87,7 +87,7 @@ def main():
         print(f"True Positive: {tp}, False Positive: {fp}, False Positive: {tn}, True Negative: {fn}")
         print("=" * 40)
 
-    # ✅ Graphs at the END
+    #  Graphs at the END
     plot_results(results)
 
 

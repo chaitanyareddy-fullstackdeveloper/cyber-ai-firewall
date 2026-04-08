@@ -56,9 +56,7 @@ benchmark_name = os.getenv("BENCHMARK", "cyber-ai-firewall")
 class StepInput(BaseModel):
     action: Optional[str] = None
 
-# ==============================
-# 🚀 RESET ENDPOINT
-# ==============================
+
 
 @app.api_route("/reset", methods=["GET", "POST"])
 def reset():
@@ -78,9 +76,7 @@ def reset():
 
     return {"state": state, "success": True}
 
-# ==============================
-# 🚀 STEP ENDPOINT
-# ==============================
+
 
 @app.api_route("/step", methods=["GET", "POST"])
 def step(input_data: Optional[StepInput] = None):
@@ -162,17 +158,13 @@ def step(input_data: Optional[StepInput] = None):
         "done": done
     }
 
-# ==============================
-# 🚀 STATE ENDPOINT
-# ==============================
+
 
 @app.api_route("/state", methods=["GET", "POST"])
 def get_state():
     return {"state": state if state is not None else {}}
 
-# ==============================
-# 🚀 RUN SERVER
-# ==============================
+
 
 if __name__ == "__main__":
     import uvicorn

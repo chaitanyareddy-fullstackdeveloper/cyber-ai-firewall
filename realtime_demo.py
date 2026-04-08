@@ -37,7 +37,7 @@ def main():
 
     choice = input("Enter choice (1/2): ")
 
-    # 👉 ONE STEP ONLY
+    #  ONE STEP ONLY
     if choice == "1":
         state = generate_live_state()
         mode = "Auto"
@@ -84,7 +84,7 @@ def main():
     print(f"Score: {score}")
     print(f"True Positive: {tp}, False Positive: {fp}, False Positive: {tn}, True Negative: {fn}")
 
-    # 🔥 Comparison (Agent vs Ideal)
+    # Comparison (Agent vs Ideal)
     results = []
 
     results.append({

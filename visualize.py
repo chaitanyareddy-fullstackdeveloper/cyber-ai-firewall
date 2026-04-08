@@ -6,7 +6,7 @@ def plot_results(results):
     scores = [r["score"] for r in results]
     accuracy = [r["accuracy"] for r in results]
 
-    # ✅ Highlight correct vs wrong
+    #  Highlight correct vs wrong
     correctness = ["Correct" if r["accuracy"] == 1 else "Wrong" for r in results]
 
     # -------- Score Graph --------
