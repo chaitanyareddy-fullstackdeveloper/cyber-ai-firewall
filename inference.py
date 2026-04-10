@@ -1,17 +1,16 @@
 import os
 from fastapi import FastAPI, Body
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Any
 
-# --- FastAPI App ---
 app = FastAPI()
 
-# --- Global State ---
+# Global state
 state = [0, 0, 0]
 step_counter = 0
 rewards_list = []
 
-# --- Request Models ---
+# Request models
 class ResetRequest(BaseModel):
     task_id: str
     seed: int
@@ -19,33 +18,40 @@ class ResetRequest(BaseModel):
 class StepInput(BaseModel):
     action: Optional[str] = None
 
-# --- RESET ENDPOINT (STRICT FIX) ---
-@app.post("/reset")
+
+def _normalize_observation(value: Any):
+    """
+    Always return a simple 3-item list so OpenEnv gets a stable observation.
+    """
+    if isinstance(value, list) and len(value) == 3:
+        return value
+    return [0, 0, 0]
+
+
+# OpenEnv reset: POST OK
+@app.api_route("/reset", methods=["POST", "GET"])
 def reset(req: ResetRequest = Body(...)):
     global state, step_counter, rewards_list
 
-    # Always reset to default valid observation
-    state = [0, 0, 0]
     step_counter = 0
     rewards_list = []
+    state = [0, 0, 0]
 
     return {
         "observation": state,
         "info": {}
     }
 
-# --- STEP ENDPOINT ---
-@app.post("/step")
+
+# OpenEnv step: POST OK
+@app.api_route("/step", methods=["POST", "GET"])
 def step(input_data: Optional[StepInput] = None):
     global state, step_counter, rewards_list
 
-    # Default action
     action = "allow"
-
     if input_data and input_data.action:
         action = input_data.action
 
-    # Simple logic for demo
     if action == "block":
         state = [0, 1, 0]
         reward = 1.0
@@ -59,6 +65,7 @@ def step(input_data: Optional[StepInput] = None):
         reward = 0.2
         done = False
 
+    state = _normalize_observation(state)
     step_counter += 1
     rewards_list.append(reward)
 
@@ -69,14 +76,15 @@ def step(input_data: Optional[StepInput] = None):
         "info": {}
     }
 
-# --- STATE ENDPOINT ---
-@app.get("/state")
+
+# State endpoint: GET OK
+@app.api_route("/state", methods=["GET", "POST"])
 def get_state():
     return {
-        "state": state
+        "state": state if isinstance(state, list) else [0, 0, 0]
     }
 
-# --- RUN SERVER ---
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=7860)
