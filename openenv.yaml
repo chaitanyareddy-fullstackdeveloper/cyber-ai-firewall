@@ -1,16 +1,23 @@
 name: cyber-ai-firewall
-
 tasks:
   - name: easy
+    difficulty: easy
   - name: medium
+    difficulty: medium
   - name: hard
+    difficulty: hard
 
 environment:
-  observation_space: tuple
+  observation_space:
+    type: array
+    shape: [3]   # matches your backend returning [0, 0, 0]
+
   action_space:
-    - allow
-    - block
-    - rate_limit
+    type: discrete
+    actions:
+      - allow
+      - block
+      - rate_limit
 
 endpoints:
   reset:

@@ -1,6 +1,11 @@
+fastapi
+uvicorn
+pydantic
+openai
+
+# To create user interface
 gradio
 matplotlib
 numpy
 scikit-learn
-openai
 python-dotenv
